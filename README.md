@@ -1,31 +1,96 @@
  
-            //if (e.RowIndex >= 0)
-            //{
-            //    // Get the index of the changed row
-            //    int rowIndex = e.RowIndex;
-            //    ID2 = Convert.ToInt32(dataGridView2.Rows[rowIndex].Cells[1].Value.ToString());
-            //    name_t2 = dataGridView2.Rows[rowIndex].Cells[2].Value.ToString();
-            //    Box_stage.Text = dataGridView2.Rows[rowIndex].Cells[3].Value.ToString();
-            //    Box_group.Text = dataGridView2.Rows[rowIndex].Cells[4].Value.ToString();
-            //    Box_group_time.Text = dataGridView2.Rows[rowIndex].Cells[5].Value.ToString();
-            //    box_class.Text = dataGridView2.Rows[rowIndex].Cells[6].Value.ToString();
-            //    txt_time.Text = dataGridView2.Rows[rowIndex].Cells[7].Value.ToString();
-            //    latepoint_string = Convert.ToInt32(dataGridView2.Rows[rowIndex].Cells[8].Value.ToString());
-            //}
-            //cmd = new SqlCommand("update test_table set name=@name3,stage=@stage3, group_type=@group3, group_ev=@group_time3,class=@class3,time=@time3,late_point=@latePoint22 where ID=@id", con);
-            //con.Open();
-            //cmd.Parameters.AddWithValue("@name3", name_t2);
-            //cmd.Parameters.AddWithValue("@id", ID2);
-            //cmd.Parameters.AddWithValue("@stage3", Box_stage.Text);
-            //cmd.Parameters.AddWithValue("@group3", Box_group.Text);
-            //cmd.Parameters.AddWithValue("@group_time3", Box_group_time.Text);
-            //cmd.Parameters.AddWithValue("@class3", box_class.Text);
-            //cmd.Parameters.AddWithValue("@time3", txt_time.Text);
-            //cmd.Parameters.AddWithValue("@latePoint22", latepoint_string);
-            //cmd.ExecuteNonQuery();
-            //MessageBox.Show("Record Updated Successfully");
-            //con.Close();
-            //ClearData();
+            using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.Common;
+using System.Data.OleDb;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Data.SqlClient;
+using System.Data.OleDb;
+
+namespace test_3
+{
+    public partial class Form3 : Form
+    {
+        SqlConnection sqlcon = new SqlConnection("Data Source=localhost\\MSSQLSERVER01;Initial Catalog=warzer;Integrated Security=True");
+        SqlDataAdapter da;
+        public Form3()
+        {
+            InitializeComponent();
+        }
+        
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            if(openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                txtfilepath.Text = openFile.FileName;
+                
+            }
+           
+        }
+        //public static string path = @"C:\Users\ALIpc\Desktop\Book1.xlsx";
+        //public static string connStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=Excel 12.0;";
+        private void button2_Click(object sender, EventArgs e)
+        {
+            string pathcon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +txtfilepath.Text + ";Extended Properties=Excel 12.0;";
+            OleDbConnection conn = new OleDbConnection(pathcon);
+            OleDbDataAdapter da = new OleDbDataAdapter("Select * from ["+ txtfilename.Text + "$]",conn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            dataGridView1.DataSource = dt;
+        }
+        private void load_data()
+        {
+            da = new SqlDataAdapter("select * from test_table", sqlcon);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            dataGridView2.DataSource = dt;
+        }
+
+        private void Form3_Load(object sender, EventArgs e)
+        {
+            load_data();
+        }
+
+        private void btn_save_Click(object sender, EventArgs e)
+        {
+            string pathcon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + txtfilepath.Text + ";Extended Properties=Excel 12.0;";
+            OleDbConnection conn = new OleDbConnection(pathcon);
+            OleDbDataAdapter da = new OleDbDataAdapter("Select * from [" + txtfilename.Text + "$]", conn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            
+            for (int i = 0;i < Convert.ToInt32(dt.Rows.Count.ToString());i++)
+            {
+                string SaceStr = "Insert into test_table (name, stage, group_type, group_ev,user_code)values(@name, @stage, @group, @grouptime,@user_code)";
+                SqlCommand savecmd = new SqlCommand(SaceStr, sqlcon);
+                //savecmd.Parameters.AddWithValue("@id", dt.Rows[i][0].ToString());
+                savecmd.Parameters.AddWithValue("@name", dt.Rows[i][1].ToString());
+                savecmd.Parameters.AddWithValue("@stage", dt.Rows[i][2].ToString());
+                savecmd.Parameters.AddWithValue("@group", dt.Rows[i][3].ToString());
+                savecmd.Parameters.AddWithValue("@grouptime", dt.Rows[i][4].ToString());
+                //savecmd.Parameters.AddWithValue("@class", dt.Rows[i][5].ToString());
+                //savecmd.Parameters.AddWithValue("@time", dt.Rows[i][6].ToString());
+                //savecmd.Parameters.AddWithValue("@late_point", dt.Rows[i][7].ToString());
+                savecmd.Parameters.AddWithValue("@user_code", dt.Rows[i][5].ToString());
+                sqlcon.Open();
+                savecmd.ExecuteNonQuery();
+                sqlcon.Close();
+            }
+            load_data();
+            MessageBox.Show("data is saved");
+        }
+    }
+}
+
 
 
 
