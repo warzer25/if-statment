@@ -1,24 +1,25 @@
-//delete btn 2
-            var senderGrid = (DataGridView)sender;
-            if (senderGrid.Columns[e.ColumnIndex] is DataGridViewButtonColumn && e.RowIndex >= 0)
+            int rowIndex = e.RowIndex;
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
             {
-                ID2 = Convert.ToInt32(dataGridView2.Rows[e.RowIndex].Cells[1].Value.ToString());
-                if (ID2 == 0)
-                {
-                    MessageBox.Show("Please select a record to delete");
-                    return;
-                }
-                string query = "DELETE FROM R_table WHERE id = @ids";
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@ids", ID2);
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-                MessageBox.Show("Record deleted successfully!");
-                DisplayData2();
+                ID = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
+                name_t = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+                Box_stage.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                Box_group.Text = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
+                Box_group_time.Text = dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString();
+                latepoint_string = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[7].Value.ToString());
+                cmd = new SqlCommand("update test_table set name=@name3,stage=@stage3, group_type=@group3, group_ev=@group_time3,late_point = @latePoint22 where ID=@id", con);
+                con.Open();
+                cmd.Parameters.AddWithValue("@name3", name_t);
+                cmd.Parameters.AddWithValue("@id", ID);
+                cmd.Parameters.AddWithValue("@stage3", Box_stage.Text);
+                cmd.Parameters.AddWithValue("@group3", Box_group.Text);
+                cmd.Parameters.AddWithValue("@group_time3", Box_group_time.Text);
+                cmd.Parameters.AddWithValue("@latePoint22", latepoint_string);
+                cmd.ExecuteNonQuery();
+                MessageBox.Show("Record Updated Successfully");
+                con.Close();
                 ClearData();
+            }
 
 
 
