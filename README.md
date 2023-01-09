@@ -1,47 +1,5 @@
  
-           string txtTime = txt_time.Text;
-            con.Open();
-            
-            foreach (DataGridViewRow row in dataGridView1.Rows)
-            {
-                cmd = new SqlCommand("insert into R_table (name_R, stage_R, group_R, group_ev_R,class,time,hours,late_point) values (@name22, @stage22, @group22, @grouptime22,@class22,@dateTime22,@hours22,@latePoint22)", con);
-                cmd2 = new SqlCommand("update test_table set late_point = @latePoint22 where id = @ID", con);
-                DataGridViewCheckBoxCell cell = row.Cells[1] as DataGridViewCheckBoxCell;
-                
-                if (cell.Value != null)
-                {
-                    if (cell.Value == cell.TrueValue)
-                    {
-
-                        string id = row.Cells[2].Value.ToString().Trim(); // added this line
-                        string name_2 = row.Cells[3].Value.ToString().Trim();
-                        string stage_3 = row.Cells[4].Value.ToString().Trim();
-                        string group_4 = row.Cells[5].Value.ToString().Trim();
-                        string group_time_5 = row.Cells[6].Value.ToString().Trim();
-                        string latepoint = row.Cells[7].Value.ToString().Trim();
-                        latePointInt = int.Parse(latepoint);
-                        //cmd.Parameters.AddWithValue("@id", id); // added this line
-                        cmd.Parameters.AddWithValue("@name22", name_2);
-                        cmd.Parameters.AddWithValue("@stage22", stage_3);
-                        cmd.Parameters.AddWithValue("@group22", group_4);
-                        cmd.Parameters.AddWithValue("@grouptime22", group_time_5);
-                        cmd.Parameters.AddWithValue("@class22", box_class.Text);
-                        cmd.Parameters.AddWithValue("@dateTime22", time_for_send);
-                        cmd.Parameters.AddWithValue("@hours22", hourss_for_send);
-                        cmd.Parameters.AddWithValue("@latePoint22", latePointInt + 1);
-
-                        cmd2.Parameters.AddWithValue("@ID", id);
-                        cmd2.Parameters.AddWithValue("@latePoint22", latePointInt + 1);
-                        cmd.ExecuteNonQuery();
-                        cmd2.ExecuteNonQuery();
-                    }
-                }
-            }
-            con.Close();
-            DisplayData2();
-            DisplayData();
-            ClearData();
-
+           regsvr32 "C:\Program Files\Common Files\Microsoft Shared\OFFICE16\ACEOLEDB.DLL"
 
 
 
