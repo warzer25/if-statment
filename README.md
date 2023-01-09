@@ -1,98 +1,41 @@
  
-            using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Common;
-using System.Data.OleDb;
-using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Data.SqlClient;
-using System.Data.OleDb;
-
-namespace test_3
-{
-    public partial class Form3 : Form
-    {
-        SqlConnection sqlcon = new SqlConnection("Data Source=localhost\\MSSQLSERVER01;Initial Catalog=warzer;Integrated Security=True");
-        SqlDataAdapter da;
-        public Form3()
-        {
-            InitializeComponent();
-        }
-        
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFile = new OpenFileDialog();
-            if(openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            using (SqlConnection connection = new SqlConnection("Data Source=localhost\\MSSQLSERVER01;Initial Catalog=warzer;Integrated Security=True"))
             {
-                txtfilepath.Text = openFile.FileName;
-                
+                connection.Open();
+                string queryString = "SELECT * FROM R_table";
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        // Create the Excel Worksheet
+                        Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+                        excel.Workbooks.Add();
+
+                        Microsoft.Office.Interop.Excel._Worksheet worksheet = excel.ActiveSheet;
+
+                        // Add the headers
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            worksheet.Cells[1, i + 1] = reader.GetName(i);
+                        }
+
+                        // Add the data
+                        int row = 2;
+                        while (reader.Read())
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                worksheet.Cells[row, i + 1] = reader[i];
+                            }
+                            row++;
+                        }
+
+                        // Save the Excel file
+                        worksheet.SaveAs("E:\\here\\file.xlsx");
+                        excel.Quit();
+                    }
+                }
             }
-           
-        }
-        //public static string path = @"C:\Users\ALIpc\Desktop\Book1.xlsx";
-        //public static string connStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path + ";Extended Properties=Excel 12.0;";
-        private void button2_Click(object sender, EventArgs e)
-        {
-            string pathcon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +txtfilepath.Text + ";Extended Properties=Excel 12.0;";
-            OleDbConnection conn = new OleDbConnection(pathcon);
-            OleDbDataAdapter da = new OleDbDataAdapter("Select * from ["+ txtfilename.Text + "$]",conn);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dataGridView1.DataSource = dt;
-        }
-        private void load_data()
-        {
-            da = new SqlDataAdapter("select * from test_table", sqlcon);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            dataGridView2.DataSource = dt;
-        }
-
-        private void Form3_Load(object sender, EventArgs e)
-        {
-            load_data();
-        }
-
-        private void btn_save_Click(object sender, EventArgs e)
-        {
-            string pathcon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + txtfilepath.Text + ";Extended Properties=Excel 12.0;";
-            OleDbConnection conn = new OleDbConnection(pathcon);
-            OleDbDataAdapter da = new OleDbDataAdapter("Select * from [" + txtfilename.Text + "$]", conn);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            
-            for (int i = 0;i < Convert.ToInt32(dt.Rows.Count.ToString());i++)
-            {
-                string SaceStr = "Insert into test_table (name, stage, group_type, group_ev,user_code)values(@name, @stage, @group, @grouptime,@user_code)";
-                SqlCommand savecmd = new SqlCommand(SaceStr, sqlcon);
-                //savecmd.Parameters.AddWithValue("@id", dt.Rows[i][0].ToString());
-                savecmd.Parameters.AddWithValue("@name", dt.Rows[i][1].ToString());
-                savecmd.Parameters.AddWithValue("@stage", dt.Rows[i][2].ToString());
-                savecmd.Parameters.AddWithValue("@group", dt.Rows[i][3].ToString());
-                savecmd.Parameters.AddWithValue("@grouptime", dt.Rows[i][4].ToString());
-                //savecmd.Parameters.AddWithValue("@class", dt.Rows[i][5].ToString());
-                //savecmd.Parameters.AddWithValue("@time", dt.Rows[i][6].ToString());
-                //savecmd.Parameters.AddWithValue("@late_point", dt.Rows[i][7].ToString());
-                savecmd.Parameters.AddWithValue("@user_code", dt.Rows[i][5].ToString());
-                sqlcon.Open();
-                savecmd.ExecuteNonQuery();
-                sqlcon.Close();
-            }
-            load_data();
-            MessageBox.Show("data is saved");
-        }
-    }
-}
-
-
-
 
 
 
