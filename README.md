@@ -1,25 +1,31 @@
-            int rowIndex = e.RowIndex;
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
-            {
-                ID = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
-                name_t = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                Box_stage.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
-                Box_group.Text = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
-                Box_group_time.Text = dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString();
-                latepoint_string = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[7].Value.ToString());
-                cmd = new SqlCommand("update test_table set name=@name3,stage=@stage3, group_type=@group3, group_ev=@group_time3,late_point = @latePoint22 where ID=@id", con);
-                con.Open();
-                cmd.Parameters.AddWithValue("@name3", name_t);
-                cmd.Parameters.AddWithValue("@id", ID);
-                cmd.Parameters.AddWithValue("@stage3", Box_stage.Text);
-                cmd.Parameters.AddWithValue("@group3", Box_group.Text);
-                cmd.Parameters.AddWithValue("@group_time3", Box_group_time.Text);
-                cmd.Parameters.AddWithValue("@latePoint22", latepoint_string);
-                cmd.ExecuteNonQuery();
-                MessageBox.Show("Record Updated Successfully");
-                con.Close();
-                ClearData();
-            }
+ 
+            //if (e.RowIndex >= 0)
+            //{
+            //    // Get the index of the changed row
+            //    int rowIndex = e.RowIndex;
+            //    ID2 = Convert.ToInt32(dataGridView2.Rows[rowIndex].Cells[1].Value.ToString());
+            //    name_t2 = dataGridView2.Rows[rowIndex].Cells[2].Value.ToString();
+            //    Box_stage.Text = dataGridView2.Rows[rowIndex].Cells[3].Value.ToString();
+            //    Box_group.Text = dataGridView2.Rows[rowIndex].Cells[4].Value.ToString();
+            //    Box_group_time.Text = dataGridView2.Rows[rowIndex].Cells[5].Value.ToString();
+            //    box_class.Text = dataGridView2.Rows[rowIndex].Cells[6].Value.ToString();
+            //    txt_time.Text = dataGridView2.Rows[rowIndex].Cells[7].Value.ToString();
+            //    latepoint_string = Convert.ToInt32(dataGridView2.Rows[rowIndex].Cells[8].Value.ToString());
+            //}
+            //cmd = new SqlCommand("update test_table set name=@name3,stage=@stage3, group_type=@group3, group_ev=@group_time3,class=@class3,time=@time3,late_point=@latePoint22 where ID=@id", con);
+            //con.Open();
+            //cmd.Parameters.AddWithValue("@name3", name_t2);
+            //cmd.Parameters.AddWithValue("@id", ID2);
+            //cmd.Parameters.AddWithValue("@stage3", Box_stage.Text);
+            //cmd.Parameters.AddWithValue("@group3", Box_group.Text);
+            //cmd.Parameters.AddWithValue("@group_time3", Box_group_time.Text);
+            //cmd.Parameters.AddWithValue("@class3", box_class.Text);
+            //cmd.Parameters.AddWithValue("@time3", txt_time.Text);
+            //cmd.Parameters.AddWithValue("@latePoint22", latepoint_string);
+            //cmd.ExecuteNonQuery();
+            //MessageBox.Show("Record Updated Successfully");
+            //con.Close();
+            //ClearData();
 
 
 
