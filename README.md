@@ -1,42 +1,65 @@
  
-            using (SqlConnection connection = new SqlConnection("Data Source=localhost\\MSSQLSERVER01;Initial Catalog=warzer;Integrated Security=True"))
+           //butn-search-2
+            string stage = Box_stage.Text;
+            string group = Box_group.Text;
+            string groupTime = Box_group_time.Text;
+            string classe_1 = box_class.Text;
+            string times_1 = txt_time.Text;
+
+            string query = "SELECT id,name_R, stage_R, group_R, group_ev_R,class,time,hours,late_point FROM R_table WHERE 1 = 1";
+            if (!string.IsNullOrEmpty(stage))
             {
-                connection.Open();
-                string queryString = "SELECT * FROM R_table";
-                using (SqlCommand command = new SqlCommand(queryString, connection))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        // Create the Excel Worksheet
-                        Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
-                        excel.Workbooks.Add();
-
-                        Microsoft.Office.Interop.Excel._Worksheet worksheet = excel.ActiveSheet;
-
-                        // Add the headers
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            worksheet.Cells[1, i + 1] = reader.GetName(i);
-                        }
-
-                        // Add the data
-                        int row = 2;
-                        while (reader.Read())
-                        {
-                            for (int i = 0; i < reader.FieldCount; i++)
-                            {
-                                worksheet.Cells[row, i + 1] = reader[i];
-                            }
-                            row++;
-                        }
-
-                        // Save the Excel file
-                        worksheet.SaveAs("E:\\here\\file.xlsx");
-                        excel.Quit();
-                    }
-                }
+                query += " AND stage_R = @stage";
+            }
+            if (!string.IsNullOrEmpty(group))
+            {
+                query += " AND group_R = @group";
+            }
+            if (!string.IsNullOrEmpty(groupTime))
+            {
+                query += " AND group_ev_R = @groupTime";
+            }
+            if (!string.IsNullOrEmpty(classe_1))
+            {
+                query += " AND class = @class";
+            }
+            if (!string.IsNullOrEmpty(times_1))
+            {
+                query += " AND time = @time";
             }
 
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                if (!string.IsNullOrEmpty(stage))
+                {
+                    cmd.Parameters.AddWithValue("@stage", stage);
+                }
+                if (!string.IsNullOrEmpty(group))
+                {
+                    cmd.Parameters.AddWithValue("@group", group);
+                }
+                if (!string.IsNullOrEmpty(groupTime))
+                {
+                    cmd.Parameters.AddWithValue("@groupTime", groupTime);
+                }
+                if (!string.IsNullOrEmpty(classe_1))
+                {
+                    cmd.Parameters.AddWithValue("@class", classe_1);
+                }
+                if (!string.IsNullOrEmpty(times_1))
+                {
+                    cmd.Parameters.AddWithValue("@time", times_1);
+                }
+
+                con.Open();
+                SqlDataAdapter da2 = new SqlDataAdapter(cmd);
+                DataTable dt2 = new DataTable();
+                da2.Fill(dt2);
+                dataGridView2.DataSource = dt2;
+                con.Close();
+            }
+
+            ClearData();
 
 
 
