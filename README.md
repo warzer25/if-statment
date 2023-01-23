@@ -3,8 +3,8 @@
 
 
     Copy code
-    private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-    {
+    pprivate void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+{
     if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
     {
         ID = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
@@ -27,7 +27,43 @@
         ClearData();
     }
 }
-
+private void dataGridView2_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+{
+    if (e.RowIndex >= 0 && dataGridView2.Rows.Count > 0)
+    {
+        int rowIndex = e.RowIndex;
+        if (dataGridView2.Rows[rowIndex].Cells[1].Value != null)
+        {
+            ID2 = Convert.ToInt32(dataGridView2.Rows[rowIndex].Cells[1].Value.ToString());
+        }
+        if (dataGridView2.Rows[rowIndex].Cells[2].Value != null)
+        {
+            name_t2 = dataGridView2.Rows[rowIndex].Cells[2].Value.ToString();
+        }
+        if (dataGridView2.Rows[rowIndex].Cells[3].Value != null)
+        {
+            Box_stage.Text = dataGridView2.Rows[rowIndex].Cells[3].Value.ToString();
+        }
+        if (dataGridView2.Rows[rowIndex].Cells[4].Value != null)
+        {
+            Box_group.Text = dataGridView2.Rows[rowIndex].Cells[4].Value.ToString();
+        }
+        if (dataGridView2.Rows[rowIndex].Cells[5].Value != null)
+        {
+            Box_group_time.Text = dataGridView2.Rows[rowIndex].Cells[5].Value.ToString();
+        }
+        if (dataGridView2.Rows[rowIndex].Cells[6].Value != null)
+        {
+            box_class.Text = dataGridView2.Rows[rowIndex].Cells[6].Value.ToString();
+        }
+        if (dataGridView2.Rows[rowIndex].Cells[7].Value != null)
+        {
+            txt_time.Text = dataGridView2.Rows[rowIndex].Cells[7].Value.ToString();
+        }
+        if (dataGridView2.Rows[rowIndex].Cells[8].Value != null)
+        {
+            totle_time3 = Convert.ToInt32(dataGridView2.Rows[rowIndex].Cells[8].Value.ToString());
+        }
 
 
             //---------------------------------------------------//
