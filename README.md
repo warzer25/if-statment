@@ -26,9 +26,9 @@
         con.Close();
         ClearData();
     }
-}
-private void dataGridView2_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-{
+    }
+    private void dataGridView2_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+    {
     if (e.RowIndex >= 0 && dataGridView2.Rows.Count > 0)
     {
         int rowIndex = e.RowIndex;
