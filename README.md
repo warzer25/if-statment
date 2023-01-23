@@ -3,104 +3,30 @@
 
 
     Copy code
-    private void send_Click(object sender, EventArgs e)
-        {
-            int plue;
-            if (!int.TryParse(txt_houers.Text, out plue))
-            {
-                MessageBox.Show("Please enter a valid integer in the textbox.");
-                return;
-            }
-            if (check_all.Checked) // check if the checkbox is checked
-            {
-                con.Open();
-                foreach (DataGridViewRow row in dataGridView1.Rows)
-                {
-                    cmd = new SqlCommand("insert into R_table (name_R, stage_R, group_R, group_ev_R,class,time,totle_time) values (@name22, @stage22, @group22, @grouptime22,@class22,@dateTime22,@totle_time)", con);
-                    cmd2 = new SqlCommand("update test_table set totle_time = @totle_time where id = @ID", con);
-                    DataGridViewCheckBoxCell cell = row.Cells[1] as DataGridViewCheckBoxCell;
-                    if (row.Cells[2].Value != null && row.Cells[2].Value.ToString() != "" &&
-                        row.Cells[3].Value != null && row.Cells[3].Value.ToString() != "" &&
-                        row.Cells[4].Value != null && row.Cells[4].Value.ToString() != "" &&
-                        row.Cells[5].Value != null && row.Cells[5].Value.ToString() != "" &&
-                        row.Cells[6].Value != null && row.Cells[6].Value.ToString() != "" &&
-                        row.Cells[7].Value != null && row.Cells[7].Value.ToString() != ""
-                        )
-                    {
-                        string id = row.Cells[2].Value.ToString().Trim();
-                        string name_2 = row.Cells[3].Value.ToString().Trim();
-                        string stage_3 = row.Cells[4].Value.ToString().Trim();
-                        string group_4 = row.Cells[5].Value.ToString().Trim();
-                        string group_time_5 = row.Cells[6].Value.ToString().Trim();
-                        string totle_time = row.Cells[7].Value.ToString().Trim();
+    private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+{
+    if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
+    {
+        ID = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
+        name_t = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
+        Box_stage.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+        Box_group.Text = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
+        Box_group_time.Text = dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString();
+        totle_time2 = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[7].Value.ToString());
+        cmd = new SqlCommand("update test_table set name=@name3,stage=@stage3, group_type=@group3, group_ev=@group_time3,totle_time = @totle_time where ID=@id", con);
+        con.Open();
+        cmd.Parameters.AddWithValue("@name3", name_t);
+        cmd.Parameters.AddWithValue("@id", ID);
+        cmd.Parameters.AddWithValue("@stage3", Box_stage.Text);
+        cmd.Parameters.AddWithValue("@group3", Box_group.Text);
+        cmd.Parameters.AddWithValue("@group_time3", Box_group_time.Text);
+        cmd.Parameters.AddWithValue("@totle_time", totle_time2);
+        cmd.ExecuteNonQuery();
 
-                        totle_time1 = int.Parse(totle_time);
-                        cmd.Parameters.AddWithValue("@name22", name_2);
-                        cmd.Parameters.AddWithValue("@stage22", stage_3);
-                        cmd.Parameters.AddWithValue("@group22", group_4);
-                        cmd.Parameters.AddWithValue("@grouptime22", group_time_5);
-                        cmd.Parameters.AddWithValue("@class22", box_class.Text);
-                        cmd.Parameters.AddWithValue("@dateTime22", time_for_send);
-                        cmd.Parameters.AddWithValue("@totle_time", totle_time1 + plue);
-                        cmd2.Parameters.AddWithValue("@ID", id);
-                        cmd2.Parameters.AddWithValue("@totle_time", totle_time1 + plue);
-                        cmd.ExecuteNonQuery();
-                        cmd2.ExecuteNonQuery();
-                    }
-
-                   
-                }
-                con.Close();
-                DisplayData2();
-                DisplayData();
-                ClearData();
-            }
-            else
-            {
-                //con.Open();
-                //foreach (DataGridViewRow row in dataGridView1.Rows)
-                //{
-                //    cmd = new SqlCommand("insert into R_table (name_R, stage_R, group_R, groupev_R,class,time,totle_time) values (@name22, @stage22, @group22, @grouptime22,@class22,@dateTime22,@totle_time)", con);
-                //    cmd2 = new SqlCommand("update test_table set totle_time = @totle_time where id = @ID", con);
-                //    DataGridViewCheckBoxCell cell = row.Cells[1] as DataGridViewCheckBoxCell;
-
-                //    if (cell.Value != null)
-                //    {
-                //        if (cell.Value == cell.TrueValue)
-                //        {
-                //            int plue = int.Parse(txt_houers.Text);
-
-                //            string id = row.Cells[2].Value.ToString().Trim();
-                //            string name_2 = row.Cells[3].Value.ToString().Trim();
-                //            string stage_3 = row.Cells[4].Value.ToString().Trim();
-                //            string group_4 = row.Cells[5].Value.ToString().Trim();
-                //            string group_time_5 = row.Cells[6].Value.ToString().Trim();
-                //            string totle_time = row.Cells[7].Value.ToString().Trim();
-
-                //            totle_time1 = int.Parse(totle_time);
-                //            //cmd.Parameters.AddWithValue("@id", id);
-                //            cmd.Parameters.AddWithValue("@name22", name_2);
-                //            cmd.Parameters.AddWithValue("@stage22", stage_3);
-                //            cmd.Parameters.AddWithValue("@group22", group_4);
-                //            cmd.Parameters.AddWithValue("@grouptime22", group_time_5);
-                //            cmd.Parameters.AddWithValue("@class22", box_class.Text);
-                //            cmd.Parameters.AddWithValue("@dateTime22", time_for_send);
-                //            cmd.Parameters.AddWithValue("@totle_time", totle_time1 + plue);
-                //            cmd2.Parameters.AddWithValue("@ID", id);
-                //            cmd2.Parameters.AddWithValue("@totle_time", totle_time1 + plue);
-                //            cmd.ExecuteNonQuery();
-                //            cmd2.ExecuteNonQuery();
-                //        }
-                //    }
-                //}
-                //con.Close();
-                //DisplayData2();
-                //DisplayData();
-                //ClearData();
-    
-            }
-
-        }
+        con.Close();
+        ClearData();
+    }
+}
 
 
 
