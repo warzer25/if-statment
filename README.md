@@ -2,118 +2,48 @@
 
 
 
-    private void search_Click(object sender, EventArgs e)
+    Copy code
+private void checkBoxSelectAll_CheckedChanged(object sender, EventArgs e)
+{
+    if (checkBoxSelectAll.Checked)
     {
-    string stage = Box_stage.Text;
-    string group = Box_group.Text;
-    string groupTime = Box_group_time.Text;
-    string classe_1 = box_class.Text;
-    string times_1 = txt_time.Text;
-    string user_id = txt_id.Text;
-    
-    DataTable dt = new DataTable();
-
-    //Search test_table
-    string query = "SELECT id,name,stage,group_type,group_ev FROM test_table WHERE 1 = 1";
-    if (!string.IsNullOrEmpty(stage))
-    {
-        query += " AND stage = @stage";
-    }
-    if (!string.IsNullOrEmpty(group))
-    {
-        query += " AND group_type = @group";
-    }
-    if (!string.IsNullOrEmpty(groupTime))
-    {
-        query += " AND group_ev = @groupTime";
-    }
-    if (!string.IsNullOrEmpty(user_id))
-    {
-        query += " AND id = @user_id";
-    }
-
-    using (SqlCommand cmd = new SqlCommand(query, con))
-    {
-        if (!string.IsNullOrEmpty(stage))
+        foreach (DataGridViewRow row in dataGridView1.Rows)
         {
-            cmd.Parameters.AddWithValue("@stage", stage);
+            DataGridViewCheckBoxCell cell = row.Cells[1] as DataGridViewCheckBoxCell;
+            cell.Value = cell.TrueValue;
         }
-        if (!string.IsNullOrEmpty(group))
-        {
-            cmd.Parameters.AddWithValue("@group", group);
-        }
-        if (!string.IsNullOrEmpty(groupTime))
-        {
-            cmd.Parameters.AddWithValue("@groupTime", groupTime);
-        }
-        if (!string.IsNullOrEmpty(user_id))
-        {
-            cmd.Parameters.AddWithValue("@user_id", user_id);
-        }
-
-        con.Open();
-        SqlDataAdapter da = new SqlDataAdapter(cmd);
-        da.Fill(dt);
-        con.Close();
     }
-
-    //Search R_table
-    query = "SELECT id,name_R, stage_R, group_R, group_ev_R,class,time,totle_time FROM R_table WHERE 1 = 1";
-    if (!string.IsNullOrEmpty(stage))
+    else
     {
-        query += " AND stage_R = @stage";
-    }
-    if (!string.IsNullOrEmpty(group))
-    {
-        query += " AND group_R = @group";
-    }
-    if (!string.IsNullOrEmpty(groupTime))
-    {
-        query += " AND group_ev_R = @groupTime";
-    }
-    if (!string.IsNullOrEmpty(classe_1
-    if (!string.IsNullOrEmpty(classe_1))
-    {
-        query += " AND class = @class";
-    }
-    if (!string.IsNullOrEmpty(times_1))
-    {
-        query += " AND time = @time";
-    }
-
-    using (SqlCommand cmd = new SqlCommand(query, con))
-    {
-        if (!string.IsNullOrEmpty(stage))
+        foreach (DataGridViewRow row in dataGridView1.Rows)
         {
-            cmd.Parameters.AddWithValue("@stage", stage);
+            DataGridViewCheckBoxCell cell = row.Cells[1] as DataGridViewCheckBoxCell;
+            cell.Value = cell.FalseValue;
         }
-        if (!string.IsNullOrEmpty(group))
-        {
-            cmd.Parameters.AddWithValue("@group", group);
-        }
-        if (!string.IsNullOrEmpty(groupTime))
-        {
-            cmd.Parameters.AddWithValue("@groupTime", groupTime);
-        }
-        if (!string.IsNullOrEmpty(classe_1))
-        {
-            cmd.Parameters.AddWithValue("@class", classe_1);
-        }
-        if (!string.IsNullOrEmpty(times_1))
-        {
-            cmd.Parameters.AddWithValue("@time", times_1);
-        }
-
-        con.Open();
-        SqlDataAdapter da2 = new SqlDataAdapter(cmd);
-        da2.Fill(dt);
-        con.Close();
     }
-
-    dataGridView2.DataSource = dt;
-
-    ClearData();
 }
+In this example, the method loops through each row in the DataGridView and sets the value of the first cell (index 0) to either the "TrueValue" or "FalseValue" depending on whether the checkbox is checked or unchecked.
+You should add this checkbox in your condition before iterating over the rows in the DataGridView in your send_Click method.
+
+Copy code
+if(checkBoxSelectAll.Checked)
+    {
+    // your existing code
+    }
+You would also need to add an else condition to handle the case where the checkbox is not checked, and you might want to send only the selected rows.
+
+
+
+
+checkBoxSelectAll.CheckedChanged += new EventHandler(checkBoxSelectAll_CheckedChanged);
+
+
+
+if(checkBoxSelectAll.Checked)
+    {
+    // your existing code
+    }
+
 
             //---------------------------------------------------//
             ////part-1
