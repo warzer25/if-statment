@@ -1,5 +1,75 @@
 
+private void search_Click(object sender, EventArgs e)
+{
+    string stage = Box_stage.Text;
+    string group = Box_group.Text;
+    string groupTime = Box_group_time.Text;
+    string classe_1 = box_class.Text;
+    string times_1 = txt_time.Text;
+    string user_id = txt_id.Text;
+    string query = "SELECT id,name,stage,group_type,group_ev,class,time,totle_time FROM test_table WHERE 1 = 1";
+    if (!string.IsNullOrEmpty(stage))
+    {
+        query += " AND stage = @stage";
+    }
+    if (!string.IsNullOrEmpty(group))
+    {
+        query += " AND group_type = @group";
+    }
+    if (!string.IsNullOrEmpty(groupTime))
+    {
+        query += " AND group_ev = @groupTime";
+    }
+    if (!string.IsNullOrEmpty(classe_1))
+    {
+        query += " AND class = @class";
+    }
+    if (!string.IsNullOrEmpty(times_1))
+    {
+        query += " AND time = @time";
+    }
+    if (!string.IsNullOrEmpty(user_id))
+    {
+        query += " AND id = @user_id";
+    }
 
+    using (SqlCommand cmd = new SqlCommand(query, con))
+    {
+        if (!string.IsNullOrEmpty(stage))
+        {
+            cmd.Parameters.AddWithValue("@stage", stage);
+        }
+        if (!string.IsNullOrEmpty(group))
+        {
+            cmd.Parameters.AddWithValue("@group", group);
+        }
+        if (!string.IsNullOrEmpty(groupTime))
+        {
+            cmd.Parameters.AddWithValue("@groupTime", groupTime);
+        }
+        if (!string.IsNullOrEmpty(classe_1))
+        {
+            cmd.Parameters.AddWithValue("@class", classe_1);
+        }
+        if (!string.IsNullOrEmpty(times_1))
+        {
+            cmd.Parameters.AddWithValue("@time", times_1);
+        }
+        if (!string.IsNullOrEmpty(user_id))
+        {
+            cmd.Parameters.AddWithValue("@user_id", user_id);
+        }
+
+        con.Open();
+        SqlDataAdapter da = new SqlDataAdapter(cmd);
+        DataTable dt = new DataTable();
+        da.Fill(dt);
+        dataGridView2.DataSource = dt;
+        con.Close();
+    }
+
+    ClearData();
+}
             //---------------------------------------------------//
             ////part-1
 
