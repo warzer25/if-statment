@@ -3,46 +3,97 @@
 
 
     Copy code
-private void checkBoxSelectAll_CheckedChanged(object sender, EventArgs e)
+private void send_Click(object sender, EventArgs e)
 {
-    if (checkBoxSelectAll.Checked)
+    if(checkBoxSelectAll.Checked) // check if the checkbox is checked
     {
+        con.Open();
         foreach (DataGridViewRow row in dataGridView1.Rows)
         {
+            cmd = new SqlCommand("insert into R_table (name_R, stage_R, group_R, group_ev_R,class,time,totle_time) values (@name22, @stage22, @group22, @grouptime22,@class22,@dateTime22,@totle_time)", con);
+            cmd2 = new SqlCommand("update test_table set totle_time = @totle_time where id = @ID", con);
             DataGridViewCheckBoxCell cell = row.Cells[1] as DataGridViewCheckBoxCell;
-            cell.Value = cell.TrueValue;
+
+            //if (cell.Value != null)
+            //{
+            //    if (cell.Value == cell.TrueValue)
+            //    {
+                    int plue = int.Parse(txt_houers.Text);
+
+                    string id = row.Cells[2].Value.ToString().Trim();
+                    string name_2 = row.Cells[3].Value.ToString().Trim();
+                    string stage_3 = row.Cells[4].Value.ToString().Trim();
+                    string group_4 = row.Cells[5].Value.ToString().Trim();
+                    string group_time_5 = row.Cells[6].Value.ToString().Trim();
+                    string totle_time = row.Cells[7].Value.ToString().Trim();
+
+                    totle_time1 = int.Parse(totle_time);
+                    //cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@name22", name_2);
+                    cmd.Parameters.AddWithValue("@stage22", stage_3);
+                    cmd.Parameters.AddWithValue("@group22", group_4);
+                    cmd.Parameters.AddWithValue("@grouptime22", group_time_5);
+                    cmd.Parameters.AddWithValue("@class22", box_class.Text);
+                    cmd.Parameters.AddWithValue("@dateTime22", time_for_send);
+                    cmd.Parameters.AddWithValue("@totle_time", totle_time1 + plue);
+                    cmd2.Parameters.AddWithValue("@ID", id);
+                    cmd2.Parameters.AddWithValue("@totle_time", totle_time1 + plue);
+                    cmd.ExecuteNonQuery();
+                    cmd2.ExecuteNonQuery();
+            //    }
+            //}
         }
+        con.Close();
+        DisplayData2();
+        DisplayData();
+        ClearData();
     }
-    else
+    else 
     {
+        con.Open();
         foreach (DataGridViewRow row in dataGridView1.Rows)
         {
+            cmd = new SqlCommand("insert into R_table (name_R, stage_R, group_R, group
+            ev_R,class,time,totle_time) values (@name22, @stage22, @group22, @grouptime22,@class22,@dateTime22,@totle_time)", con);
+            cmd2 = new SqlCommand("update test_table set totle_time = @totle_time where id = @ID", con);
             DataGridViewCheckBoxCell cell = row.Cells[1] as DataGridViewCheckBoxCell;
-            cell.Value = cell.FalseValue;
+
+            if (cell.Value != null)
+            {
+                if (cell.Value == cell.TrueValue)
+                {
+                    int plue = int.Parse(txt_houers.Text);
+
+                    string id = row.Cells[2].Value.ToString().Trim();
+                    string name_2 = row.Cells[3].Value.ToString().Trim();
+                    string stage_3 = row.Cells[4].Value.ToString().Trim();
+                    string group_4 = row.Cells[5].Value.ToString().Trim();
+                    string group_time_5 = row.Cells[6].Value.ToString().Trim();
+                    string totle_time = row.Cells[7].Value.ToString().Trim();
+
+                    totle_time1 = int.Parse(totle_time);
+                    //cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@name22", name_2);
+                    cmd.Parameters.AddWithValue("@stage22", stage_3);
+                    cmd.Parameters.AddWithValue("@group22", group_4);
+                    cmd.Parameters.AddWithValue("@grouptime22", group_time_5);
+                    cmd.Parameters.AddWithValue("@class22", box_class.Text);
+                    cmd.Parameters.AddWithValue("@dateTime22", time_for_send);
+                    cmd.Parameters.AddWithValue("@totle_time", totle_time1 + plue);
+                    cmd2.Parameters.AddWithValue("@ID", id);
+                    cmd2.Parameters.AddWithValue("@totle_time", totle_time1 + plue);
+                    cmd.ExecuteNonQuery();
+                    cmd2.ExecuteNonQuery();
+                }
+            }
         }
+        con.Close();
+        DisplayData2();
+        DisplayData();
+        ClearData();
     }
 }
-In this example, the method loops through each row in the DataGridView and sets the value of the first cell (index 0) to either the "TrueValue" or "FalseValue" depending on whether the checkbox is checked or unchecked.
-You should add this checkbox in your condition before iterating over the rows in the DataGridView in your send_Click method.
 
-Copy code
-if(checkBoxSelectAll.Checked)
-    {
-    // your existing code
-    }
-You would also need to add an else condition to handle the case where the checkbox is not checked, and you might want to send only the selected rows.
-
-
-
-
-checkBoxSelectAll.CheckedChanged += new EventHandler(checkBoxSelectAll_CheckedChanged);
-
-
-
-if(checkBoxSelectAll.Checked)
-    {
-    // your existing code
-    }
 
 
             //---------------------------------------------------//
