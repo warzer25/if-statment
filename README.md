@@ -4,7 +4,7 @@
 
     Copy code
     pprivate void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-{
+    {
     if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
     {
         ID = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString());
