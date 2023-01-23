@@ -3,8 +3,8 @@
 
 
     Copy code
-private void send_Click(object sender, EventArgs e)
-{
+    private void send_Click(object sender, EventArgs e)
+    {
     if(checkBoxSelectAll.Checked) // check if the checkbox is checked
     {
         con.Open();
