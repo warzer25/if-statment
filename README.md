@@ -1,16 +1,11 @@
- // Clear the second ComboBox
-            box_class.Items.Clear();
-            // Enable the second ComboBox
-            box_class.Enabled = true;
-            // Populate the second ComboBox based on the selected stage
-            if (Box_stage.SelectedItem.ToString() == "1")
-            {
-                box_class.Items.AddRange(new object[] { "c#", "kurdalogy", "ward" });
-            }
-            else if (Box_stage.SelectedItem.ToString() == "2")
-            {
-                box_class.Items.AddRange(new object[] {  "c#", "html", "mobile" });
-            }
+ Join Zoom Meeting
+https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
+
+Meeting ID: 469 903 2903
+Passcode: 450ZXL
+
+
+
 
 
 
