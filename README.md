@@ -1,6 +1,16 @@
- Box_stage.Items.AddRange(new object[] {"1","2"});
-            // Disable the second ComboBox initially
-            box_class.Enabled = false;
+ // Clear the second ComboBox
+            box_class.Items.Clear();
+            // Enable the second ComboBox
+            box_class.Enabled = true;
+            // Populate the second ComboBox based on the selected stage
+            if (Box_stage.SelectedItem.ToString() == "1")
+            {
+                box_class.Items.AddRange(new object[] { "c#", "kurdalogy", "ward" });
+            }
+            else if (Box_stage.SelectedItem.ToString() == "2")
+            {
+                box_class.Items.AddRange(new object[] {  "c#", "html", "mobile" });
+            }
 
 
 
