@@ -1,9 +1,12 @@
 
-Join Zoom Meeting
-https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
 
-Meeting ID: 469 903 2903
-Passcode: 450ZXL
+
+            int rowCount1 = dataGridView1.RowCount;
+            int rowCount2 = dataGridView2.RowCount;
+            rowCount1--;
+            rowCount2--;
+            label_count1.Text = "Total Rows: " + rowCount1.ToString();
+            label_count2.Text = "Total Rows: " + rowCount2.ToString();
 
 
 
