@@ -7,7 +7,72 @@ Meeting ID: 469 903 2903
 Passcode: 450ZXL
 
 
+if (string.IsNullOrEmpty(txt_filename.Text))
+            {
+                MessageBox.Show("Please enter a filename.");
+                return;
+            }
 
+            using (SqlConnection connection = new SqlConnection("Data Source=localhost\\MSSQLSERVER01;Initial Catalog=warzer;Integrated Security=True"))
+            {
+                connection.Open();
+                string queryString = "SELECT * FROM R_table";
+                using (SqlCommand command = new SqlCommand(queryString, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        // Create the Excel Worksheet
+                        Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+                        excel.Workbooks.Add();
+                        Microsoft.Office.Interop.Excel._Worksheet worksheet = excel.ActiveSheet;
+
+                        // Add the headers
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            worksheet.Cells[1, i + 1] = reader.GetName(i);
+                        }
+
+                        // Add the data
+                        int row = 2;
+                        while (reader.Read())
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                worksheet.Cells[row, i + 1] = reader[i];
+                            }
+                            row++;
+                        }
+
+                        // Save the Excel file
+                        SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                        saveFileDialog1.Filter = "Excel Workbook|*.xlsx";
+                        saveFileDialog1.Title = "Save Excel File";
+                        saveFileDialog1.FileName = txt_filename.Text;
+                        if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            string filename = saveFileDialog1.FileName;
+                            if (File.Exists(filename))
+                            {
+                                DialogResult result = MessageBox.Show("The file already exists. Do you want to overwrite it?", "File Exists", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                if (result != DialogResult.Yes)
+                                {
+                                    return;
+                                }
+                            }
+                            try
+                            {
+                                worksheet.SaveAs(filename);
+                                excel.Quit();
+                                MessageBox.Show("The file has been saved successfully.", "File Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("An error occurred while saving the file: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
+                }
+            }
 
 
 
