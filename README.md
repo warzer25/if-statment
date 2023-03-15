@@ -1,5 +1,14 @@
 
 
+Join Zoom Meeting
+https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
+
+Meeting ID: 469 903 2903
+Passcode: 450ZXL
+
+
+
+
 
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
             {
