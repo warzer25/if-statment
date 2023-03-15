@@ -1,84 +1,10 @@
 
 
+            Join Zoom Meeting
+https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
 
-            int rowCount1 = dataGridView1.RowCount;
-            int rowCount2 = dataGridView2.RowCount;
-            rowCount1--;
-            rowCount2--;
-            label_count1.Text = "Total Rows: " + rowCount1.ToString();
-            label_count2.Text = "Total Rows: " + rowCount2.ToString();
-
-
-
-
-
-
-
-
-
-            for (int i = 0; i < dataGridView1.Rows.Count; i++)
-            {
-                // Check if the row's checkbox is checked.
-                if ((bool)dataGridView1.Rows[i].Cells["CheckBoxColumn"].FormattedValue)
-                {
-                    // Get the ID of the row to be deleted.
-                    int ID = Convert.ToInt32(dataGridView1.Rows[i].Cells[2].Value);
-
-                    // Delete the row from the first database table.
-                    string query = "DELETE FROM test_table WHERE id = @ids";
-                    using (SqlCommand cmd = new SqlCommand(query, con))
-                    {
-                        cmd.Parameters.AddWithValue("@ids", ID);
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-                        con.Close();
-                    }
-
-                    // Remove the row from the first DataGridView.
-                    dataGridView1.Rows.RemoveAt(i);
-
-                    // Decrement the counter because the number of rows in the DataGridView has changed.
-                    i--;
-                }
-            }
-
-            // Loop through all the rows in the second DataGridView.
-            for (int j = 0; j < dataGridView2.Rows.Count; j++)
-            {
-                // Check if the row's button is clicked.
-                if (dataGridView2.Rows[j].Cells["CheckBoxColumn1"].Value != null)
-                {
-                    ID2 = Convert.ToInt32(dataGridView2.Rows[j].Cells[1].Value.ToString());
-                    if (ID2 == 0)
-                    {
-                        MessageBox.Show("Please select a record to delete");
-                        return;
-                    }
-                    // Delete the row from the second database table.
-                    string query = "DELETE FROM R_table WHERE id = @ids";
-                    using (SqlCommand cmd = new SqlCommand(query, con))
-                    {
-                        cmd.Parameters.AddWithValue("@ids", ID2);
-                        con.Open();
-                        cmd.ExecuteNonQuery();
-                        con.Close();
-                    }
-
-                    // Remove the row from the second DataGridView.
-                    dataGridView2.Rows.RemoveAt(j);
-
-                    // Decrement the counter because the number of rows in the DataGridView has changed.
-                    j--;
-                }
-            }
-            DisplayData2();
-            DisplayData();
-            // Show a message box to confirm that the records have been deleted successfully.
-            MessageBox.Show("Records deleted successfully!");
-
-
-
-
+Meeting ID: 469 903 2903
+Passcode: 450ZXL
 
 
 
