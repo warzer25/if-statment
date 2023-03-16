@@ -10,8 +10,8 @@
     using System.Threading.Tasks;
     using System.Windows.Forms;
 
-namespace test_3
-{
+    namespace test_3
+    {
     public partial class Form5 : Form
     {
         SqlConnection con = new SqlConnection("Data Source=localhost\\MSSQLSERVER01;Initial Catalog=warzer;Integrated Security=True");
