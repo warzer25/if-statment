@@ -1,8 +1,202 @@
-Join Zoom Meeting
-https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
 
-Meeting ID: 469 903 2903
-Passcode: 450ZXL
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Drawing;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+
+namespace test_3
+{
+    public partial class Form5 : Form
+    {
+        SqlConnection con = new SqlConnection("Data Source=localhost\\MSSQLSERVER01;Initial Catalog=warzer;Integrated Security=True");
+        SqlCommand cmd;
+        SqlCommand cmd2;
+        SqlDataAdapter adapt;
+        int ID = 0;
+        int ID2 = 0;
+        string name_t = "";
+        string name_t2 = "";
+        string time_for_send = DateTime.Now.ToString("yyyy:MM:dd");
+        int totle_time1 = 0;
+        int totle_time2 = 0;
+        int totle_time3 = 0;
+        public Form5()
+        {
+            InitializeComponent();
+            DisplayData1();
+            countingnames();
+            countingallnames();
+        }
+
+        private void Form5_Load(object sender, EventArgs e)
+        {
+
+        }
+        private void SearchData(string id)
+        {
+            con.Open();
+            adapt = new SqlDataAdapter("SELECT * FROM R_table WHERE id LIKE '%" + id + "%'", con);
+            DataTable dt = new DataTable();
+            adapt.Fill(dt);
+            dataGridView1.DataSource = dt;
+            con.Close();
+            countingnames();
+        }
+
+        private void DisplayData1()
+        {
+            con.Open();
+            DataTable dt2 = new DataTable();
+            adapt = new SqlDataAdapter("select * from R_table", con);
+            adapt.Fill(dt2);
+            dataGridView1.DataSource = dt2;
+            con.Close();
+        }
+        private void countingnames()
+        {
+            int rowCount1 = dataGridView1.RowCount;
+            rowCount1--;
+            label_count1.Text = "Total Rows: " + rowCount1.ToString();
+        }
+        private void countingallnames()
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM test_table", con);
+            int count = (int)cmd.ExecuteScalar();
+            con.Close();
+            label_count2.Text = "Total Names: " + count.ToString();
+        }
+        private void FilterData()
+        {
+            string stageValue = Box_stage.SelectedItem?.ToString();
+            string timeValue = Box_group_time.SelectedItem?.ToString(); 
+            string classValue = box_class.SelectedItem?.ToString();
+            string query = "SELECT * FROM R_table WHERE 1=1";
+            if (!string.IsNullOrEmpty(stageValue))
+            {
+                query += " AND stage_R = @stage";
+            }
+
+            if (!string.IsNullOrEmpty(timeValue))
+            {
+                query += " AND group_ev_R = @time";
+            }
+
+            if (!string.IsNullOrEmpty(classValue))
+            {
+                query += " AND class = @class";
+            }
+
+            SqlCommand cmd = new SqlCommand(query, con);
+
+            if (!string.IsNullOrEmpty(stageValue))
+            {
+                cmd.Parameters.AddWithValue("@stage", stageValue);
+            }
+
+            if (!string.IsNullOrEmpty(timeValue))
+            {
+                cmd.Parameters.AddWithValue("@time", timeValue);
+            }
+
+            if (!string.IsNullOrEmpty(classValue))
+            {
+                cmd.Parameters.AddWithValue("@class", classValue);
+            }
+
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+            dataGridView1.DataSource = dt;
+            countingnames();
+        }
+        private void Box_stage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterData();
+        }
+
+        private void Box_group_time_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterData();
+        }
+
+        private void box_class_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FilterData();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (resetCheckBox.Checked)
+            {
+                Box_stage.SelectedItem = null;
+                Box_group_time.SelectedItem = null;
+                box_class.SelectedItem = null;
+
+                DisplayData1();
+                countingnames();
+                resetCheckBox.Checked = false;
+            }
+        }
+
+        
+
+        private void textBox_search_KeyUp(object sender, KeyEventArgs e)
+        {
+            //// Check if the user pressed Enter
+            //if (e.KeyCode == Keys.Enter)
+            //{
+            //    // Call SearchData method with ID value entered in textBox_search control
+            //    SearchData(textBox_search.Text);
+            //}
+        }
+
+        private void textBox_search_TextChanged(object sender, EventArgs e)
+        {
+            SearchData(textBox_search.Text);
+        }
+
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            int rowIndex = e.RowIndex;
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
+            {
+                ID2 = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString());
+                totle_time3 = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString());
+                cmd = new SqlCommand("update R_table set totle_time=@totle_time3 where ID=@id", con);
+                con.Open();
+                cmd.Parameters.AddWithValue("@id", ID2);
+                cmd.Parameters.AddWithValue("@totle_time3", totle_time3);
+                cmd.ExecuteNonQuery();
+                con.Close();
+
+                DisplayData1();
+                countingnames();
+            }
+            
+        }
+
+        
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+//---------------------------------------------------------------------------//
 
 
 
