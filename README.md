@@ -78,46 +78,43 @@
         }
         private void FilterData()
         {
-            string stageValue = Box_stage.SelectedItem?.ToString();
-            string timeValue = Box_group_time.SelectedItem?.ToString(); 
-            string classValue = box_class.SelectedItem?.ToString();
+            // Create a dictionary to hold the filter conditions
+            Dictionary<string, string> filters = new Dictionary<string, string>();
+
+            // Add the selected filter values to the dictionary
+            if (Box_stage.SelectedItem != null)
+            {
+                filters.Add("stage_R", Box_stage.SelectedItem.ToString());
+            }
+            if (Box_group_time.SelectedItem != null)
+            {
+                filters.Add("group_ev_R", Box_group_time.SelectedItem.ToString());
+            }
+            if (box_class.SelectedItem != null)
+            {
+                filters.Add("class", box_class.SelectedItem.ToString());
+            }
+
+            // Construct the SQL query
             string query = "SELECT * FROM R_table WHERE 1=1";
-            if (!string.IsNullOrEmpty(stageValue))
+            foreach (KeyValuePair<string, string> filter in filters)
             {
-                query += " AND stage_R = @stage";
+                query += " AND " + filter.Key + " = @value";
             }
 
-            if (!string.IsNullOrEmpty(timeValue))
+            // Execute the query with parameterized values
+            using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                query += " AND group_ev_R = @time";
+                foreach (KeyValuePair<string, string> filter in filters)
+                {
+                    cmd.Parameters.AddWithValue("@value", filter.Value);
+                }
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+                dataGridView1.DataSource = dt;
             }
 
-            if (!string.IsNullOrEmpty(classValue))
-            {
-                query += " AND class = @class";
-            }
-
-            SqlCommand cmd = new SqlCommand(query, con);
-
-            if (!string.IsNullOrEmpty(stageValue))
-            {
-                cmd.Parameters.AddWithValue("@stage", stageValue);
-            }
-
-            if (!string.IsNullOrEmpty(timeValue))
-            {
-                cmd.Parameters.AddWithValue("@time", timeValue);
-            }
-
-            if (!string.IsNullOrEmpty(classValue))
-            {
-                cmd.Parameters.AddWithValue("@class", classValue);
-            }
-
-            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
-            dataGridView1.DataSource = dt;
             countingnames();
         }
         private void Box_stage_SelectedIndexChanged(object sender, EventArgs e)
