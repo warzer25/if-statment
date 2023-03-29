@@ -6,7 +6,9 @@ https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
 
 Meeting ID: 469 903 2903
 Passcode: 450ZXL
-
+//----------------------------------------------------------------------------------------------//
+    query += " AND " + filter.Key + " LIKE '%' + @value + '%'";
+//------------------------------------------------------------------------------------------//
     private void search_Click(object sender, EventArgs e)
         {
             DisplayData();
