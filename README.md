@@ -6,6 +6,13 @@ https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
 
 Meeting ID: 469 903 2903
 Passcode: 450ZXL
+//------------------------------------------------------------------------------------------------//
+
+            if (string.IsNullOrEmpty(box_class.Text) && !int.TryParse(txt_houers.Text, out int increst_time))
+            {
+            MessageBox.Show("Please enter valid inputs in the textboxes.");
+             return;
+            }
 
 
 //----------------------------------------------------------------------------------------------//
