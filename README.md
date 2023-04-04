@@ -8,45 +8,42 @@ Meeting ID: 469 903 2903
 Passcode: 450ZXL
 //------------------------------------------------------------------------------------------------//
 
-           string query = "SELECT * FROM R_table WHERE 1=1";
+            // Create a dictionary to hold the filter conditions
+            Dictionary<string, string> filters = new Dictionary<string, string>();
 
-           if (Box_stage.SelectedItem != null)
-           {
-           query += " AND stage_R LIKE '%' + @stage_R + '%'";
-           }
-
-           if (Box_group_time.SelectedItem != null)
-           {
-           query += " AND group_ev_R LIKE '%' + @group_ev_R + '%'";
-           }
-
-           if (box_class.SelectedItem != null)
-           {
-            query += " AND class LIKE '%' + @class + '%'";
-           }
-
-           using (SqlCommand cmd = new SqlCommand(query, con))
-           {
+            // Add the selected filter values to the dictionary
             if (Box_stage.SelectedItem != null)
             {
-               cmd.Parameters.AddWithValue("@stage_R", Box_stage.SelectedItem.ToString());
-           }
-
+                filters.Add("stage_R", Box_stage.SelectedItem.ToString());
+            }
             if (Box_group_time.SelectedItem != null)
-              {
-               cmd.Parameters.AddWithValue("@group_ev_R", Box_group_time.SelectedItem.ToString());
-           }
+            {
+                filters.Add("group_ev_R", Box_group_time.SelectedItem.ToString());
+            }
+            if (box_class.SelectedItem != null)
+            {
+                filters.Add("class", box_class.SelectedItem.ToString());
+            }
 
-           if (box_class.SelectedItem != null)
-           {
-              cmd.Parameters.AddWithValue("@class", box_class.SelectedItem.ToString());
-           }
+            // Construct the SQL query
+            string query = "SELECT * FROM R_table WHERE 1=1";
+            foreach (KeyValuePair<string, string> filter in filters)
+            {
+                query += " AND " + filter.Key + " LIKE '%' + @value + '%'";
+            }
 
-    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-    DataTable dt = new DataTable();
-    adapter.Fill(dt);
-    dataGridView1.DataSource = dt;
-           }
+            // Execute the query with parameterized values
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                foreach (KeyValuePair<string, string> filter in filters)
+                {
+                    cmd.Parameters.AddWithValue("@value", filter.Value);
+                }
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+                dataGridView1.DataSource = dt;
+            }
 
 
 
