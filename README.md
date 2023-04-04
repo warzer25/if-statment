@@ -8,10 +8,46 @@ Meeting ID: 469 903 2903
 Passcode: 450ZXL
 //------------------------------------------------------------------------------------------------//
 
-           Form2 form2 = new Form2();
-            form2.ShowDialog();
-            
-            this.Focus();
+           string query = "SELECT * FROM R_table WHERE 1=1";
+
+if (Box_stage.SelectedItem != null)
+{
+    query += " AND stage_R LIKE '%' + @stage_R + '%'";
+}
+
+if (Box_group_time.SelectedItem != null)
+{
+    query += " AND group_ev_R LIKE '%' + @group_ev_R + '%'";
+}
+
+if (box_class.SelectedItem != null)
+{
+    query += " AND class LIKE '%' + @class + '%'";
+}
+
+using (SqlCommand cmd = new SqlCommand(query, con))
+{
+    if (Box_stage.SelectedItem != null)
+    {
+        cmd.Parameters.AddWithValue("@stage_R", Box_stage.SelectedItem.ToString());
+    }
+
+    if (Box_group_time.SelectedItem != null)
+    {
+        cmd.Parameters.AddWithValue("@group_ev_R", Box_group_time.SelectedItem.ToString());
+    }
+
+    if (box_class.SelectedItem != null)
+    {
+        cmd.Parameters.AddWithValue("@class", box_class.SelectedItem.ToString());
+    }
+
+    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+    DataTable dt = new DataTable();
+    adapter.Fill(dt);
+    dataGridView1.DataSource = dt;
+}
+
 
 
 //----------------------------------------------------------------------------------------------//
