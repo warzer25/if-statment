@@ -7,7 +7,7 @@ https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
 Meeting ID: 469 903 2903
 Passcode: 450ZXL
 //------------------------------------------------------------------------------------------------//
-"ALTER TABLE employes ALTER COLUMN ID COUNTER(1,1)"
+ALTER TABLE employees ALTER COLUMN ID INT IDENTITY(1,1)
 
 //----------------------------------------------------------------------------------------------//
 
