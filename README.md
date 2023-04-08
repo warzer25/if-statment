@@ -8,7 +8,7 @@ Meeting ID: 469 903 2903
 Passcode: 450ZXL
 //------------------------------------------------------------------------------------------------//
 
-ALTER TABLE employees DROP COLUMN ID; ALTER TABLE employees ADD ID INT IDENTITY(1,1)
+DBCC CHECKIDENT ('employees', RESEED, 0)
 
 //----------------------------------------------------------------------------------------------//
 
