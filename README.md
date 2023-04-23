@@ -17,7 +17,90 @@ DBCC CHECKIDENT ('employees', RESEED, 0)
 
 //----------------------------------------------------------------------------------------------//
 
-           
+                       private void btn_delete_Click(object sender, EventArgs e)
+                      {
+                          // Loop through all the rows in the first DataGridView.
+                          for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                          {
+                              // Check if the row's checkbox is checked.
+                              if ((bool)dataGridView1.Rows[i].Cells["CheckBoxColumn"].FormattedValue)
+                              {
+                                  // Get the ID of the row to be deleted.
+                                  int ID = Convert.ToInt32(dataGridView1.Rows[i].Cells[2].Value);
+
+                                  // Delete the row from the first database table.
+                                  string query = "DELETE FROM test_table WHERE id = @ids";
+                                  using (SqlCommand cmd = new SqlCommand(query, con))
+                                  {
+                                      cmd.Parameters.AddWithValue("@ids", ID);
+                                      con.Open();
+                                      cmd.ExecuteNonQuery();
+                                      con.Close();
+                                  }
+
+                                  // Remove the row from the first DataGridView.
+                                  dataGridView1.Rows.RemoveAt(i);
+
+                                  // Decrement the counter because the number of rows in the DataGridView has changed.
+                                  i--;
+
+                                  // Update the totle_time column in the test_table.
+                                  string updateQuery = "UPDATE test_table SET totle_time = totle_time - 2 WHERE id = @ids";
+                                  using (SqlCommand cmd = new SqlCommand(updateQuery, con))
+                                  {
+                                      cmd.Parameters.AddWithValue("@ids", ID);
+                                      con.Open();
+                                      cmd.ExecuteNonQuery();
+                                      con.Close();
+                                  }
+                              }
+                          }
+
+                          // Loop through all the rows in the second DataGridView.
+                          for (int j = 0; j < dataGridView2.Rows.Count; j++)
+                          {
+                              // Check if the row's button is clicked.
+                              if (dataGridView2.Rows[j].Cells["CheckBoxColumn1"].Value != null)
+                              {
+                                  ID2 = Convert.ToInt32(dataGridView2.Rows[j].Cells[1].Value.ToString());
+                                  if (ID2 == 0)
+                                  {
+                                      MessageBox.Show("Please select a record to delete");
+                                      return;
+                                  }
+                                  // Delete the row from the second database table.
+                                  string query = "DELETE FROM R_table WHERE id = @ids";
+                                  using (SqlCommand cmd = new SqlCommand(query, con))
+                                  {
+                                      cmd.Parameters.AddWithValue("@ids", ID2);
+                                      con.Open();
+                                      cmd.ExecuteNonQuery();
+                                      con.Close();
+                                  }
+
+                                  // Remove the row from the second DataGridView.
+                                  dataGridView2.Rows.RemoveAt(j);
+
+                                  // Decrement the counter because the number of rows in the DataGridView has changed.
+                                  j--;
+
+                                  // Update the totle_time column in the R_table.
+                                  string updateQuery = "UPDATE R_table SET totle_time = totle_time - 2 WHERE id = @ids";
+                                  using (SqlCommand cmd = new SqlCommand(updateQuery, con))
+                                  {
+                                      cmd.Parameters.AddWithValue("@ids", ID2);
+                                      con.Open();
+                                      cmd.ExecuteNonQuery();
+                                      con.Close();
+                                  }
+                              }
+                          }
+                          DisplayData2();
+                          DisplayData();
+                          // Show a message box to confirm that the records have been deleted successfully.
+                          MessageBox.Show("Records deleted successfully!");
+                      }
+
 //---------------------------------------------------------------------------//
 
 
