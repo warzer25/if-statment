@@ -2,10 +2,15 @@
 
 
 Join Zoom Meeting
+Join Zoom Meeting
 https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
 
 Meeting ID: 469 903 2903
 Passcode: 450ZXL
+
+
+
+
 //------------------------------------------------------------------------------------------------//
 
 DBCC CHECKIDENT ('employees', RESEED, 0)
