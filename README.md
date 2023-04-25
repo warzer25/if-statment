@@ -10,37 +10,49 @@ Passcode: 450ZXL
 
 //------------------------------------------------------------------------------------//
 
-    private void insert_Click(object sender, EventArgs e)
+          private void insert_Click(object sender, EventArgs e)
         {
             // Find the smallest missing ID
-            cmd = new SqlCommand("WITH NumberSequence AS (SELECT ROW_NUMBER() OVER (ORDER BY id) AS rn FROM test_table) SELECT MIN(NumberSequence.rn) FROM NumberSequence LEFT JOIN test_table ON NumberSequence.rn = test_table.id WHERE test_table.id IS NULL", con);
-            con.Open();
-            object result = cmd.ExecuteScalar();
-            int smallestMissingID = (result == DBNull.Value) ? GetNextAvailableID() : Convert.ToInt32(result);
-            con.Close();
+            int smallestMissingID;
+            using (con)
+            {
+                con.Open();
+                cmd = new SqlCommand("WITH NumberSequence AS (SELECT ROW_NUMBER() OVER (ORDER BY id) AS rn FROM test_table) SELECT MIN(NumberSequence.rn) FROM NumberSequence LEFT JOIN test_table ON NumberSequence.rn = test_table.id WHERE test_table.id IS NULL", con);
+                object result = cmd.ExecuteScalar();
+                smallestMissingID = (result == DBNull.Value) ? GetNextAvailableID() : Convert.ToInt32(result);
+                con.Close();
+            }
 
             // Enable IDENTITY_INSERT, insert the record, and disable IDENTITY_INSERT in a single command
-            cmd = new SqlCommand("SET IDENTITY_INSERT test_table ON; insert into test_table (id, name, stage, group_type, group_ev) values (@id, @name2, @stage2, @group2, @grouptime2); SET IDENTITY_INSERT test_table OFF", con);
-            con.Open();
-            cmd.Parameters.AddWithValue("@id", smallestMissingID);
-            cmd.Parameters.AddWithValue("@name2", txt_addname.Text);
-            cmd.Parameters.AddWithValue("@stage2", txt_addstage.Text);
-            cmd.Parameters.AddWithValue("@group2", txt_addgroup.Text);
-            cmd.Parameters.AddWithValue("@grouptime2", txt_addgrouptime.Text);
-            cmd.ExecuteNonQuery();
-            con.Close();
+            using (con)
+            {
+                con.Open();
+                cmd = new SqlCommand("SET IDENTITY_INSERT test_table ON; insert into test_table (id, name, stage, group_type, group_ev) values (@id, @name2, @stage2, @group2, @grouptime2); SET IDENTITY_INSERT test_table OFF", con);
+                cmd.Parameters.AddWithValue("@id", smallestMissingID);
+                cmd.Parameters.AddWithValue("@name2", txt_addname.Text);
+                cmd.Parameters.AddWithValue("@stage2", txt_addstage.Text);
+                cmd.Parameters.AddWithValue("@group2", txt_addgroup.Text);
+                cmd.Parameters.AddWithValue("@grouptime2", txt_addgrouptime.Text);
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
 
             ClearData();
         }
 
         private int GetNextAvailableID()
         {
-            cmd = new SqlCommand("SELECT MAX(id) + 1 FROM test_table", con);
-            con.Open();
-            int nextID = Convert.ToInt32(cmd.ExecuteScalar());
-            con.Close();
+            int nextID;
+            using (con)
+            {
+                con.Open();
+                cmd = new SqlCommand("SELECT MAX(id) + 1 FROM test_table", con);
+                nextID = Convert.ToInt32(cmd.ExecuteScalar());
+                con.Close();
+            }
             return nextID;
         }
+  
 
 
 //------------------------------------------------------------------------------------------------//
