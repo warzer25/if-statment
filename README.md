@@ -7,7 +7,52 @@ https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
 
 Meeting ID: 469 903 2903
 Passcode: 450ZXL
-//--------------------------------------------------//
+
+
+        //===============================================//
+        bool dataGridView1Selected = false;
+    bool dataGridView2Selected = false;
+
+    // Check if any rows are selected in the first DataGridView.
+    foreach (DataGridViewRow row in dataGridView1.Rows)
+    {
+        if ((bool)row.Cells["CheckBoxColumn"].FormattedValue)
+        {
+            dataGridView1Selected = true;
+            break;
+        }
+    }
+
+    // Check if any rows are selected in the second DataGridView.
+    foreach (DataGridViewRow row in dataGridView2.Rows)
+    {
+        if (row.Cells["CheckBoxColumn1"].Value != null)
+        {
+            dataGridView2Selected = true;
+            break;
+        }
+    }
+
+    // Check if rows are selected in both DataGridViews.
+    if (dataGridView1Selected && dataGridView2Selected)
+    {
+        MessageBox.Show("Please select rows from only one DataGridView at a time.");
+        return;
+    }
+
+    // If rows are selected in only one DataGridView, proceed with deleting the selected rows.
+    if (dataGridView1Selected)
+    {
+        // Delete rows from the first DataGridView.
+        // ...
+    }
+
+    if (dataGridView2Selected)
+    {
+        // Delete rows from the second DataGridView.
+        // ...
+    }
+        //--------------------------------------------------//
         private void button2_Click(object sender, EventArgs e)
        {
             string pathcon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + txtfilepath.Text + ";Extended Properties=Excel 12.0;";
