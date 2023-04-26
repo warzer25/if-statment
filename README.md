@@ -7,6 +7,60 @@ https://us05web.zoom.us/j/4699032903?pwd=aWVwbFpxWnMrbzUrN0Nwb3ZtV0RiUT09
 
 Meeting ID: 469 903 2903
 Passcode: 450ZXL
+//--------------------------------------------------//
+        private void button2_Click(object sender, EventArgs e)
+       {
+            string pathcon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + txtfilepath.Text + ";Extended Properties=Excel 12.0;";
+            OleDbConnection conn = new OleDbConnection(pathcon);
+            conn.Open();
+            DataTable schemaTable = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
+            string sheetName = schemaTable.Rows[0]["TABLE_NAME"].ToString();
+            conn.Close();
+            OleDbDataAdapter da = new OleDbDataAdapter("Select * from [" + sheetName + "]", conn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            dataGridView1.DataSource = dt;
+       }
+        private void load_data()
+        {
+            da = new SqlDataAdapter("select * from test_table", sqlcon);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            dataGridView2.DataSource = dt;
+        }
+
+        private void Form3_Load(object sender, EventArgs e)
+        {
+            load_data();
+        }
+
+        private void btn_save_Click(object sender, EventArgs e)
+        {
+            string pathcon = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + txtfilepath.Text + ";Extended Properties=Excel 12.0;";
+            OleDbConnection conn = new OleDbConnection(pathcon);
+            conn.Open();
+            DataTable schemaTable = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
+            string sheetName = schemaTable.Rows[0]["TABLE_NAME"].ToString();
+            conn.Close();
+            OleDbDataAdapter da = new OleDbDataAdapter("Select * from [" + sheetName + "]", conn);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+
+            for (int i = 0; i < Convert.ToInt32(dt.Rows.Count.ToString()); i++)
+            {
+                string SaceStr = "Insert into test_table (name, stage, group_type, group_ev)values(@name, @stage, @group, @grouptime)";
+                SqlCommand savecmd = new SqlCommand(SaceStr, sqlcon);
+                savecmd.Parameters.AddWithValue("@name", dt.Rows[i][1].ToString());
+                savecmd.Parameters.AddWithValue("@stage", dt.Rows[i][2].ToString());
+                savecmd.Parameters.AddWithValue("@group", dt.Rows[i][3].ToString());
+                savecmd.Parameters.AddWithValue("@grouptime", dt.Rows[i][4].ToString());
+                sqlcon.Open();
+                savecmd.ExecuteNonQuery();
+                sqlcon.Close();
+            }
+            load_data();
+            MessageBox.Show("data is saved");
+        }
 
 //------------------------------------------------------------------------------------//
 
